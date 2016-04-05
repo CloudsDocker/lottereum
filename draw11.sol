@@ -53,7 +53,8 @@ contract draw is mortal {
     }
 
     function doDraw() {
-     if (drawn) throw; 
+     if (drawn) throw;
+     if (msg.sender != owner) throw; 
      winningnumber = 50;
       for (uint i = 0; i < numTickets; ++i) {
         if (tickets[i].guess == winningnumber) {
@@ -68,6 +69,7 @@ contract draw is mortal {
     }
 
     function transferPot(address _newContract) {
+      if (msg.sender != owner) throw;
       if (this.balance == 0) throw;
       _newContract.send(this.balance);
     }
