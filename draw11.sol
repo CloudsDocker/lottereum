@@ -67,6 +67,11 @@ contract draw is mortal {
       drawn = true;
     }
 
+    function transferPot(address _newContract) {
+      if (this.balance == 0) throw;
+      _newContract.send(this.balance);
+    }
+
     function getNumTickets() constant returns (uint) {
        return numTickets;
     }
