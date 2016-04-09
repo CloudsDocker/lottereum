@@ -25,6 +25,8 @@ contract draw is mortal {
     mapping(uint => Ticket) tickets;
     address[] winningaddresses;
 
+    event BuyTicket(uint _ticketid);
+
     function draw() {
   	 numTickets = 0;
    	 drawn = false;
@@ -50,6 +52,7 @@ contract draw is mortal {
       if (_guess > 1000 || _guess < 1) throw;
       ticketid = numTickets++;
       tickets[ticketid] = Ticket(_guess, msg.sender);
+      BuyTicket(ticketid);
     }
 
     function doDraw() {
@@ -87,4 +90,5 @@ contract draw is mortal {
     function getWinners() constant returns (address a) {
       a = winningaddresses[0];
     }
+    
 }
