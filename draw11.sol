@@ -1,23 +1,10 @@
-
-contract mortal {
+contract draw {
     address owner;
-
-    function mortal() {
-   	 owner = msg.sender;
-    }
-
-    function kill() {
-   	 if (msg.sender == owner) suicide(owner);
-    }
-}
-
-contract draw is mortal {
-
-    uint numTickets;
-    string drawdate;
-    bool drawn;
-    uint entryfee;
-    uint winningnumber;    
+    uint public numTickets;
+    uint public drawDate;
+    bool public drawn;
+    uint public entryFee;
+    uint public winningNumber;    
     struct Ticket {
      uint guess;
      address eth_address;
@@ -27,20 +14,13 @@ contract draw is mortal {
 
     event BuyTicket(uint _ticketid);
 
-    function draw() {
+    function draw(uint _offset, uint _entryFee) {
+         owner = msg.sender;
   	 numTickets = 0;
    	 drawn = false;
-   	 winningnumber = 0;
-         drawdate = '2016-03-31';
-         entryfee = 100000000000000000;  // one tenth of a ether
-    }
-
-    function getEntryFee() constant returns (uint) {
-      return entryfee;
-    }
-
-    function getDrawDate() constant returns (string) {
-      return drawdate; 
+   	 winningNumber = 0;
+         drawDate = now + _offset;
+         entryFee = _entryFee;
     }
 
     function getPot() constant returns (uint) {
@@ -48,7 +28,7 @@ contract draw is mortal {
     }
 
     function buyTicket(uint _guess) returns (uint ticketid) {
-      if (msg.value != 100000000000000000) throw;
+      if (msg.value != entryFee) throw;
       if (_guess > 1000 || _guess < 1) throw;
       ticketid = numTickets++;
       tickets[ticketid] = Ticket(_guess, msg.sender);
@@ -57,10 +37,10 @@ contract draw is mortal {
 
     function doDraw() {
      if (drawn) throw;
-     if (msg.sender != owner) throw; 
-     winningnumber = 50;
+     if (now < drawDate) throw; 
+     winningNumber = 50;
       for (uint i = 0; i < numTickets; ++i) {
-        if (tickets[i].guess == winningnumber) {
+        if (tickets[i].guess == winningNumber) {
           winningaddresses.push(tickets[i].eth_address); 
         }
       }
@@ -77,18 +57,14 @@ contract draw is mortal {
       _newContract.send(this.balance);
     }
 
-    function getNumTickets() constant returns (uint) {
-       return numTickets;
-    }
-
     function getTicketById(uint _ticketid) constant returns (uint a, address b) {
       var t = tickets[_ticketid];
       a = t.guess;
       b = t.eth_address;
     }
 
-    function getWinners() constant returns (address a) {
-      a = winningaddresses[0];
+    function getWinnerByIndex(uint _i) constant returns (address a) {
+      a = winningaddresses[_i];
     }
     
 }
