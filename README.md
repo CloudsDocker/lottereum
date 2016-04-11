@@ -43,8 +43,6 @@ var draw = drawContract.new(
 
 ...
 
-## Transferring money from the miner to other accounts
-
 
 ## Buying tickets
 
@@ -60,6 +58,12 @@ Check whether it worked with:
 
 ```js
 eth.getTransactionReceipt(theticket);
+```
+
+## Transferring money from the miner to other accounts
+
+```js
+eth.sendTransaction({from:theminer, to:thebuyer, value: 1000000000})
 ```
 
 ## Interrogating the draw
