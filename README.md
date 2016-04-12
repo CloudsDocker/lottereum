@@ -41,7 +41,7 @@ var draw = drawContract.new(
 
 ## Starting geth in test mode
 
-...
+geth --identity "glynnaws"  --rpc --rpcport "8000" --rpccorsdomain "*" --port "30303" --nodiscover --ipcapi "admin,db,eth,debug,miner,net,shh,txpool,personal,web3" --rpcapi "db,eth,net,web3" --autodag --networkid 1900 --nat "any" --unlock "175b92f61ce2c633354234e50b862832f3e6377a" --mine --minerthreads "1" console 
 
 
 ## Buying tickets
