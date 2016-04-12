@@ -17,8 +17,9 @@ var srcCompiled = web3.eth.compile.solidity(src);
 
 var drawContract = web3.eth.contract(srcCompiled.draw.info.abiDefinition);
 
-
-var draw = drawContract.new(
+// create a contract to be drawn in 300 seconds, with a 0.1eth entry fee 
+// with commission paid to "theorganiser"
+var draw = drawContract.new(300,100000000000000000,theorganiser,
   {
     from: web3.eth.accounts[0],
     data: srcCompiled.draw.code, 
