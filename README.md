@@ -48,9 +48,6 @@ geth --identity "glynnaws"  --rpc --rpcport "8000" --rpccorsdomain "*" --port "3
 ## Buying tickets
 
 ```js
-var theminer = "0x175b92f61ce2c633354234e50b862832f3e6377a";
-var thepot = "0xae775a3520f9c3bfe7dbe06620d39b05cb882885";
-var thebuyer = "0x0ebcea3a0d7fb008440fb28e95041d50d1184e95";
 personal.unlockAccount(thebuyer, "password")
 var theticket = draw.buyTicket(42, {from: thebuyer, gas: 3000000, value: 100000000000000000 });
 ```
