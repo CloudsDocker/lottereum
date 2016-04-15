@@ -72,7 +72,7 @@ draw.numTickets();
 draw.drawn();
 draw.drawDate();
 draw.entryFee();
-draw.getTicketById(0);
+draw.tickets(0);
 ```
 
 ## Listening for events
@@ -80,6 +80,9 @@ draw.getTicketById(0);
 ```js
 var event = draw.BuyTicket();
 event.watch(function(e,r) { console.log("Ticket bought", e, JSON.stringify(r)); });
+
+var event = draw.DrawDone();
+event.watch(function(e,r) { console.log("Drawn!", e, JSON.stringify(r)); });
 ```
 
 ## Doing the draw

@@ -10,11 +10,12 @@ contract draw {
      uint guess;
      address eth_address;
     }
-    mapping(uint => Ticket) tickets;
-    address[] winningaddresses;
+    mapping(uint => Ticket) public tickets;
+    address[] public winningaddresses;
 
     event BuyTicket(uint _ticketid);
-
+    event DrawDone(uint _winningNumber);
+ 
     function draw(uint _offset, uint _entryFee, address _organiser) {
          owner = msg.sender;
   	 numTickets = 0;
@@ -53,6 +54,7 @@ contract draw {
         winningaddresses[j].send(payout / winningaddresses.length);
       }
       organiser.send(commission);
+      DrawDone(winningNumber);
       drawn = true;
     }
 
@@ -62,15 +64,4 @@ contract draw {
       if (!drawn) throw; 
       _newContract.send(this.balance);
     }
-
-    function getTicketById(uint _ticketid) constant returns (uint a, address b) {
-      var t = tickets[_ticketid];
-      a = t.guess;
-      b = t.eth_address;
-    }
-
-    function getWinnerByIndex(uint _i) constant returns (address a) {
-      a = winningaddresses[_i];
-    }
-    
 }
