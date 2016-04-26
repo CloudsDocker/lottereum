@@ -5,7 +5,8 @@ contract draw {
     bool public drawn;
     uint public entryFee;
     uint public winningNumber;  
-    address organiser;  
+    address public organiser;
+    address public nextDraw;  
     struct Ticket {
      uint guess;
      address eth_address;
@@ -63,5 +64,6 @@ contract draw {
       if (this.balance == 0) throw;
       if (!drawn) throw; 
       _newContract.send(this.balance);
+      nextDraw = _newContract; 
     }
 }
