@@ -20,9 +20,9 @@ contract drawRegister {
       numDraws += 1;      
    }
 
-   function getLatestDraw () returns (address latest) {
+   function getLatestDraw () constant returns (address _latest) {
       if (numDraws == 0) throw;
-      latest = draws[numDraws-1].eth_address;
+      _latest = draws[numDraws-1].eth_address;
    }
 
 }
