@@ -1,0 +1,12 @@
+
+register = <make the drawRegister from abi + address>
+
+lastDrawAddress = register.getLatestDraw();
+
+lastDraw = <make a draw from draw abi + lastDrawAddress>
+
+draw = <make a new draw from sol code>
+  lastDraw.doDraw()
+    lastDraw.transferPot(draw.address)
+      register.addDraw(draw.addres)
+ 
