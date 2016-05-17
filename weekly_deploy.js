@@ -230,14 +230,17 @@ var draw = drawContract.new(30,100000000000000000,theminer,
          } else {
            console.log("Contract mined! New draw Address: " + contract.address);
            lastDraw.doDraw({from: theminer, gas: 3000000}, function(e, d) { 
-             if(d.address) {
+             console.log("dodraw",e,JSON.stringify(d)); 
+             if (!e) {
                console.log("Draw done and mined");
                lastDraw.transferPot(contract.address, {from: theminer, gas: 3000000}, function(e, d2) {
-                 if(d2.address) {
+                 console.log("transferPot",e,JSON.stringify(d2));  
+                 if (!e) {
                    console.log("Pot transferred to ", contract.address);
                    register.addDraw(contract.address, {from: theminer, gas: 3000000}, function(e, d3) {
-                     if(d3.address) {
-                      console.log("Draw Register updated");
+                     console.log("addDraw",e,JSON.stringify(d3));
+                     if (!e) {
+                       console.log("Draw Register updated");
                      }
                    });
                  }
