@@ -1,5 +1,7 @@
 contract drawInterface {
 
+  uint public winningNumber;  
+
   function getPot() constant returns (uint) {
   }
  
@@ -36,6 +38,11 @@ contract drawRegister {
 
    }
 
+   function getWinningNumber ()  constant returns (uint _winner){
+      drawInterface draw = drawInterface(getPreviousDraw());
+      _winner = draw.winningNumber();
+   }
+
    function addDraw (address _eth_address) {
       if (msg.sender != owner) throw;
       draws[numDraws] = drawData(now, _eth_address);
@@ -45,6 +52,11 @@ contract drawRegister {
    function getLatestDraw () constant returns (address _latest) {
       if (numDraws == 0) throw;
       _latest = draws[numDraws-1].eth_address;
+   }
+
+   function getPreviousDraw () constant returns (address _previous) {
+      if (numDraws < 2) throw;
+      _previous = draws[numDraws-2].eth_address;
    }
 
 }

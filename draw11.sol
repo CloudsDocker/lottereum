@@ -4,6 +4,7 @@ contract draw {
     uint public drawDate;
     bool public drawn;
     uint public entryFee;
+    uint public payout;
     uint public winningNumber;  
     address public organiser;
     address public nextDraw;  
@@ -22,6 +23,7 @@ contract draw {
   	 numTickets = 0;
    	 drawn = false;
    	 winningNumber = 0;
+         payout = 0;
          drawDate = now + _offset;
          entryFee = _entryFee;
          organiser= _organiser;
@@ -44,13 +46,14 @@ contract draw {
      if (drawn) throw;
      if (now < drawDate) throw; 
      winningNumber = (now % 1000) +1 ;
+     winningNumber = 50;
       for (uint i = 0; i < numTickets; ++i) {
         if (tickets[i].guess == winningNumber) {
           winningaddresses.push(tickets[i].eth_address); 
         }
       }
-      var commission = this.balance / 10;
-      var payout = this.balance - commission;
+      var commission = numTickets*entryFee / 10;
+      payout = this.balance - commission;
       for (uint j = 0; j < winningaddresses.length; ++j) {
         winningaddresses[j].send(payout / winningaddresses.length);
       }
@@ -66,4 +69,14 @@ contract draw {
       _newContract.send(this.balance);
       nextDraw = _newContract; 
     }
+
+    function getPrizeValue (address _query) returns (uint _value) {
+      if (!drawn) throw;
+      _value =0;
+      for (uint i = 0; i < winningaddresses.length; ++i) {
+        if (winningaddresses[i] == _query) {
+          _value += payout / winningaddresses.length;        
+        }
+      }
+    } 
 }
