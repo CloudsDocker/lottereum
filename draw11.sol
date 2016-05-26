@@ -70,7 +70,7 @@ contract draw {
       nextDraw = _newContract; 
     }
 
-    function getPrizeValue (address _query) returns (uint _value) {
+    function getPrizeValue (address _query) constant returns (uint _value) {
       if (!drawn) throw;
       _value =0;
       for (uint i = 0; i < winningaddresses.length; ++i) {
