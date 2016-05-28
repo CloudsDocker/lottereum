@@ -33,12 +33,12 @@ contract draw {
        return this.balance; 
     }
 
-    function buyTicket(uint _guess) returns (uint ticketid) {
+    function buyTicket(address _buyer, uint _guess) returns (uint ticketid) {
       if (msg.value != entryFee) throw;
       if (_guess > 1000 || _guess < 1) throw;
       if (drawn) throw;
       ticketid = numTickets++;
-      tickets[ticketid] = Ticket(_guess, msg.sender);
+      tickets[ticketid] = Ticket(_guess, _buyer);
       BuyTicket(ticketid);
     }
 

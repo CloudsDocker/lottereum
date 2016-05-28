@@ -5,13 +5,16 @@ contract drawInterface {
   function getPot() constant returns (uint) {
   }
  
-  function buyTicket (uint _guess) {
+  function buyTicket (address _buyer, uint _guess) {
+  }
+  
+  function getPrizeValue (address _query) constant returns(uint) {
   }
 
 }
 
 
-contract drawRegister {
+contract lottereo {
    address owner;
    uint public numDraws;
    struct drawData {
@@ -22,7 +25,7 @@ contract drawRegister {
  
 
 
-   function drawRegister()  {
+   function lottereo()  {
       numDraws = 0;
       owner = msg.sender;
    }
@@ -34,7 +37,7 @@ contract drawRegister {
 
    function buyTicket(uint _guess)  {
      drawInterface draw = drawInterface(getLatestDraw());
-     draw.buyTicket.value(msg.value)(_guess);
+     draw.buyTicket.value(msg.value)(msg.sender,_guess);
 
    }
 
@@ -57,6 +60,11 @@ contract drawRegister {
    function getPreviousDraw () constant returns (address _previous) {
       if (numDraws < 2) throw;
       _previous = draws[numDraws-2].eth_address;
+   }
+
+   function getPrizeValue(address _query) constant returns (uint _value) {
+     drawInterface draw = drawInterface(getPreviousDraw());
+     _value = draw.getPrizeValue(_query);
    }
 
 }
