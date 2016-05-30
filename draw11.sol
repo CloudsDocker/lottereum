@@ -46,7 +46,6 @@ contract draw {
      if (drawn) throw;
      if (now < drawDate) throw; 
      winningNumber = (now % 1000) +1 ;
-     winningNumber = 50;
       for (uint i = 0; i < numTickets; ++i) {
         if (tickets[i].guess == winningNumber) {
           winningaddresses.push(tickets[i].eth_address); 
