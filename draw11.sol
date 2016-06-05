@@ -8,6 +8,7 @@ contract draw {
     uint public winningNumber;  
     address public organiser;
     address public nextDraw;  
+    address public previousDrawAddress;
     struct Ticket {
      uint guess;
      address eth_address;
@@ -18,7 +19,7 @@ contract draw {
     event BuyTicket(uint _ticketid);
     event DrawDone(uint _winningNumber);
  
-    function draw(uint _offset, uint _entryFee, address _organiser) {
+    function draw(uint _offset, uint _entryFee, address _organiser, address _previousDrawAddress) {
          owner = msg.sender;
   	 numTickets = 0;
    	 drawn = false;
@@ -27,6 +28,7 @@ contract draw {
          drawDate = now + _offset;
          entryFee = _entryFee;
          organiser= _organiser;
+         previousDrawAddress = _previousDrawAddress;
     }
 
     function getPot() constant returns (uint) {
