@@ -1,0 +1,6 @@
+#!/usr/bin/expect
+spawn /usr/bin/geth attach
+sleep 10
+send "loadScript('./weekly_deploy.js')\r"
+sleep 120
+close

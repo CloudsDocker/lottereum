@@ -2,6 +2,7 @@ contract draw {
     address owner;
     uint public numTickets;
     uint public drawDate;
+    uint public actualDrawDate;
     bool public drawn;
     uint public entryFee;
     uint public payout;
@@ -26,6 +27,7 @@ contract draw {
    	 winningNumber = 0;
          payout = 0;
          drawDate = now + _offset;
+         actualDrawDate = 0;
          entryFee = _entryFee;
          organiser= _organiser;
          previousDrawAddress = _previousDrawAddress;
@@ -48,6 +50,7 @@ contract draw {
      if (drawn) throw;
      if (now < drawDate) throw; 
      winningNumber = (now % 1000) +1 ;
+     actualDrawDate = now;
       for (uint i = 0; i < numTickets; ++i) {
         if (tickets[i].guess == winningNumber) {
           winningaddresses.push(tickets[i].eth_address); 
