@@ -17,8 +17,8 @@ contract draw {
     mapping(uint => Ticket) public tickets;
     address[] public winningaddresses;
 
-    event BuyTicket(uint _ticketid);
-    event DrawDone(uint _winningNumber);
+    event Log_BuyTicket(uint _ticketid);
+    event Log_DrawDone(uint _winningNumber);
  
     function draw(uint _offset, uint _entryFee, address _organiser, address _previousDrawAddress) {
          owner = msg.sender;
@@ -43,14 +43,14 @@ contract draw {
       if (drawn) throw;
       ticketid = numTickets++;
       tickets[ticketid] = Ticket(_guess, _buyer);
-      BuyTicket(ticketid);
+      Log_BuyTicket(ticketid);
     }
 
     function doDraw() {
-     if (drawn) throw;
-     if (now < drawDate) throw; 
-     winningNumber = (now % 1000) +1 ;
-     actualDrawDate = now;
+      if (drawn) throw;
+      if (now < drawDate) throw; 
+      winningNumber = 50 ;
+      actualDrawDate = now;
       for (uint i = 0; i < numTickets; ++i) {
         if (tickets[i].guess == winningNumber) {
           winningaddresses.push(tickets[i].eth_address); 
@@ -58,20 +58,21 @@ contract draw {
       }
       var commission = numTickets*entryFee / 10;
       payout = this.balance - commission;
-      for (uint j = 0; j < winningaddresses.length; ++j) {
-        winningaddresses[j].send(payout / winningaddresses.length);
-      }
-      organiser.send(commission);
-      DrawDone(winningNumber);
       drawn = true;
+      for (uint j = 0; j < winningaddresses.length; ++j) {
+        if (!winningaddresses[j].send(payout / winningaddresses.length)) throw;
+      }
+      // we need to make sure this works with rounding - does commission + payout always equal this.balance
+      if(!organiser.send(commission)) throw;
+      Log_DrawDone(winningNumber);
     }
 
     function transferPot(address _newContract) {
       if (msg.sender != owner) throw;
       if (this.balance == 0) throw;
       if (!drawn) throw; 
-      _newContract.send(this.balance);
       nextDraw = _newContract; 
+      if(!_newContract.send(this.balance)) throw;
     }
 
     function getPrizeValue (address _query) constant returns (uint _value) {
