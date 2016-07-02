@@ -1,5 +1,5 @@
 #!/usr/bin/expect
-set timeout 180
+set timeout 1000
 spawn /usr/bin/geth attach
 expect ">"
 send "loadScript('weekly_deploy.js')\r"

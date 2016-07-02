@@ -1,6 +1,6 @@
 var lottereoAddress ="0x93ff7ee96a55f777f311f511b19586393f5598df";
 
-var lottereoSrc = "$LOTTSRC"; 
+var lottereoSrc = '$LOTTSRC'; 
 
 var lottereoSrcCompiled = web3.eth.compile.solidity(lottereoSrc);
 
@@ -8,7 +8,7 @@ var lottereoAbiDef =lottereoSrcCompiled.lottereo.info.abiDefinition;
 
 var lottereo = eth.contract(lottereoAbiDef).at(lottereoAddress);
 
-var drawSrc =  "$DRAWSRC";
+var drawSrc =  '$DRAWSRC';
 
 var drawSrcCompiled = web3.eth.compile.solidity(drawSrc);
 
@@ -33,11 +33,10 @@ var draw = drawContract.new(30,100000000000000000,theminer,latestDrawAddress,
            console.log("Contract transaction send: TransactionHash: " + contract.transactionHash + " waiting to be mined...");
          } else {
            console.log("Contract mined! New draw Address: " + contract.address);
-           latestDraw.doDraw({from: theminer, gas: 3000000}, function(e, d) { 
-             console.log("dodraw",e,JSON.stringify(d)); 
-             if (!e) {
-               console.log("Draw done and mined");
-               latestDraw.transferPot(contract.address, {from: theminer, gas: 3000000}, function(e, d2) {
+           var event = latestDraw.Log_WinningNumberSelected();
+           event.watch(function(e,r) {
+             console.log("Winning  Number Selected!",r);
+             latestDraw.transferPot(contract.address, {from: theminer, gas: 3000000}, function(e, d2) {
                  console.log("transferPot",e,JSON.stringify(d2));  
                  if (!e) {
                    console.log("Pot transferred to ", contract.address);
@@ -49,9 +48,10 @@ var draw = drawContract.new(30,100000000000000000,theminer,latestDrawAddress,
                    });
                  }
                });
-             }
+           });
+           latestDraw.doDraw({from: theminer, gas: 3000000}, function(e, d) { 
+             console.log("dodraw",e,JSON.stringify(d)); 
            }); 
          } 
        }
 });
-

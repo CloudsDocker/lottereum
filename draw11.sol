@@ -247,6 +247,7 @@ contract draw is usingOraclize {
     address public nextDraw;  
     address public previousDrawAddress;
     bool public paidOut;
+    bytes32 oraclizeId;
     struct Ticket {
      uint guess;
      address eth_address;
@@ -256,6 +257,7 @@ contract draw is usingOraclize {
 
     event Log_BuyTicket(uint _ticketid);
     event Log_DrawDone(uint _winningNumber);
+    event Log_WinningNumberSelected(uint _winningNumber);
  
     function draw(uint _offset, uint _entryFee, address _organiser, address _previousDrawAddress) {
          owner = msg.sender;
@@ -269,6 +271,7 @@ contract draw is usingOraclize {
          organiser= _organiser;
          previousDrawAddress = _previousDrawAddress;
          paidOut = false;
+         oraclizeId = 0;
     }
 
     function getPot() constant returns (uint) {
@@ -287,7 +290,7 @@ contract draw is usingOraclize {
     function doDraw() {
       if (drawn) throw;
       if (now < drawDate) throw; 
-      oraclize_query("WolframAlpha", "random number between 1 and 1000");
+      oraclizeId = oraclize_query("WolframAlpha", "random number between 1 and 1000");
      }
 
     function payOut() {
@@ -330,9 +333,11 @@ contract draw is usingOraclize {
     }
     
     function __callback(bytes32 _id, string _result) {
-       if(drawn) throw;
+       if (drawn) throw;
+       if (oraclizeId ==0 || oraclizeId != _id) throw;
        drawn = true;
        actualDrawDate = now;
        winningNumber = parseInt(_result,10);
+       Log_WinningNumberSelected(winningNumber);
     } 
 }
