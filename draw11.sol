@@ -289,6 +289,7 @@ contract draw is usingOraclize {
 
     function doDraw() {
       if (drawn) throw;
+      if (msg.sender != owner) throw;
       if (now < drawDate) throw; 
       oraclizeId = oraclize_query("WolframAlpha", "random number between 1 and 1000");
      }
