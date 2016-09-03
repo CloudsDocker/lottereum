@@ -22,7 +22,9 @@ var drawContract = web3.eth.contract(drawAbiDef);
 
 var theminer = eth.accounts[0];
 
-var draw = drawContract.new(30,100000000000000000,theminer,latestDrawAddress,
+var theorganiser = eth.accounts[1];
+
+var draw = drawContract.new(30,100000000000000000,theorganiser,latestDrawAddress,
   {
     from: theminer,
     data: drawSrcCompiled.draw.code, 

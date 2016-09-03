@@ -294,12 +294,15 @@ contract draw is usingOraclize {
       oraclizeId = oraclize_query("WolframAlpha", "random number between 1 and 1000");
      }
 
-    function payOut() {
+    function transferPot(address _newContract) {
       if (!drawn) throw;
       if (winningNumber == 0) throw;
       if (msg.sender != owner) throw;
       if (paidOut) throw;
+
       paidOut = true;
+      nextDraw = _newContract; 
+
       for (uint i = 0; i < numTickets; ++i) {
         if (tickets[i].guess == winningNumber) {
           winningaddresses.push(tickets[i].eth_address); 
@@ -307,20 +310,17 @@ contract draw is usingOraclize {
       }
       var commission = numTickets*entryFee / 10;
       payout = this.balance - commission;
+
       for (uint j = 0; j < winningaddresses.length; ++j) {
         if (!winningaddresses[j].send(payout / winningaddresses.length)) throw;
       }
       // we need to make sure this works with rounding - does commission + payout always equal this.balance
       if(!organiser.send(commission)) throw;
-      Log_DrawDone(winningNumber);
-    }
-
-    function transferPot(address _newContract) {
-      if (msg.sender != owner) throw;
-      if (this.balance == 0) throw;
-      if (!drawn) throw; 
-      nextDraw = _newContract; 
+      
+      //send remaining balance to the new draw, i.e. the rollover
       if(!_newContract.send(this.balance)) throw;
+      Log_DrawDone(winningNumber);
+
     }
 
     function getPrizeValue (address _query) constant returns (uint _value) {
