@@ -280,7 +280,7 @@ contract draw is usingOraclize {
 
     function buyTicket(address _buyer, uint _guess) returns (uint ticketid) {
       if (msg.value != entryFee) throw;
-      if (_guess > 1000 || _guess < 1) throw;
+      if (_guess > 100 || _guess < 1) throw;
       if (drawn) throw;
       ticketid = numTickets++;
       tickets[ticketid] = Ticket(_guess, _buyer);
@@ -291,7 +291,7 @@ contract draw is usingOraclize {
       if (drawn) throw;
       if (msg.sender != owner) throw;
       if (now < drawDate) throw; 
-      oraclizeId = oraclize_query("WolframAlpha", "random number between 1 and 1000");
+      oraclizeId = oraclize_query("WolframAlpha", "random number between 1 and 100");
      }
 
     function transferPot(address _newContract) {
